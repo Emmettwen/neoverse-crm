@@ -1,18 +1,13 @@
 <script setup lang="ts">
-  import type { Location, Order } from '@/utils/interface'
-  import ct from 'i18n-iso-countries'
-  import zhCt from 'i18n-iso-countries/langs/zh.json'
-  import { onMounted, reactive, ref } from 'vue'
-  import OrderStatus from '@/components/base/OrderStatus.vue'
-  import router from '@/router'
-  import { useAppStore } from '@/store/app'
+  import type { Order } from '@/utils/interface'
+  import { computed, ref } from 'vue'
+  import { useI18n } from 'vue-i18n'
   import api from '@/utils/api'
   import { copyText, getImageUrl, message } from '@/utils/helper'
   import { useTableServer } from '@/utils/hooks'
   import request from '@/utils/request'
 
-  ct.registerLocale(zhCt)
-
+  const { t } = useI18n()
   defineOptions({
     name: 'OrderList',
   })
@@ -23,33 +18,71 @@
     loading,
     totalItems,
     loadItems,
-  } = useTableServer<Order>('order', ['product', 'paymentPic'])
-  const headers = ref([
-    { title: 'Order Number', key: 'documentId' },
-    { title: 'Product', key: 'product.name' },
-    { title: 'Status', key: 'orderStatus' },
-    { title: 'Machine Code', key: 'code' },
-    { title: 'Qty', key: 'qty' },
-    { title: 'Total', key: 'total' },
-    { title: 'Duration', key: 'duration' },
-    { title: '操作', key: 'actions', align: 'end' },
+  } = useTableServer<Order>('order', ['product', 'paymentPic', 'customer'])
+  const headers = computed(() => [
+    { title: t('order.orderNumber'), key: 'documentId' },
+    { title: t('order.product'), key: 'product.name' },
+    { title: t('order.customer'), key: 'customer.username' },
+    { title: t('order.status'), key: 'orderStatus' },
+    { title: t('order.machineCode'), key: 'code' },
+    { title: t('product.qty'), key: 'qty' },
+    { title: t('checkout.total'), key: 'total' },
+    { title: t('product.duration'), key: 'duration' },
+    { title: '收益', key: 'group' },
+    { title: t('product.actions'), key: 'actions', align: 'end' },
   ] as const)
 
-  const selected = ref()
   const dialog = ref(false)
+  const groupDialog = ref(false)
+  const groupItems = ref([
+    { title: '4%', value: '00' },
+    { title: '5%', value: '01' },
+    { title: '7%', value: '02' },
+    { title: '12%', value: '03' },
+  ])
+  const groupId = ref('00')
+  const target = ref('')
 
-  const approveOrder = (documentId: string) => {
-    if (confirm('确认通过并发放订单：' + documentId + '的密钥吗？')) {
+  const chooseRate = (documentId: string) => {
+    target.value = documentId
+    groupDialog.value = true
+  }
+
+  const approveOrder = () => {
+    if (confirm(t('order.confirmMessage', { id: target.value }))) {
       request({
-        ...api.order.approve(documentId),
+        ...api.order.approve(target.value),
+        data: {
+          rate: groupId.value,
+        },
       }).then(res => {
-        message.success('审批成功')
+        message.success(t('checkout.approve'))
         loadItems()
+        groupDialog.value = false
       })
     }
   }
 
   const confirmationTarget = ref<Order>(null)
+  const groupRate = group => {
+    switch (group) {
+      case 'g00': {
+        return '4%'
+      }
+      case 'g01': {
+        return '5%'
+      }
+      case 'g02': {
+        return '7%'
+      }
+      case 'g03': {
+        return '12%'
+      }
+      default: {
+        return '5%'
+      }
+    }
+  }
 
   const showImage = (target: Order) => {
     confirmationTarget.value = target
@@ -74,16 +107,21 @@
       @update:options="loadItems"
     >
       <template #[`item.code`]="{value}">
-        <span
-          class="d-inline-block text-truncate"
-          style="max-width: 120px"
-        >{{ value }}</span>
-        <v-btn
-          icon="mdi-content-copy"
-          size="small"
-          variant="text"
-          @click="copyText(value)"
-        />
+        <div v-if="value" class="d-flex align-center">
+          <span
+            class="d-inline-block text-truncate"
+            style="max-width: 120px"
+          >{{ value }}</span>
+          <v-btn
+            icon="mdi-content-copy"
+            size="small"
+            variant="text"
+            @click="copyText(value)"
+          />
+        </div>
+      </template>
+      <template #[`item.group`]="{ value }">
+        {{ groupRate(value) }}
       </template>
       <template #[`item.customer`]="{value}">
         {{ value ? value.name : '' }}
@@ -100,22 +138,43 @@
           icon="mdi-check"
           size="small"
           variant="text"
-          @click="approveOrder(item.documentId)"
+          @click="chooseRate(item.documentId)"
         />
       </template>
     </v-data-table-server>
     <v-dialog
       v-model="dialog"
-      width="500px"
       persistent
+      width="500px"
     >
       <v-card>
-        <v-card-title>支付凭证</v-card-title>
+        <v-card-title>{{ t('order.receipt') }}</v-card-title>
         <v-card-text>
           <v-img :src="getImageUrl(confirmationTarget?.paymentPic)" />
         </v-card-text>
         <v-card-actions>
-          <v-btn block color="primary" @click="dialog = false">关闭</v-btn>
+          <v-btn block color="primary" @click="dialog = false">{{ t('close') }}</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-dialog
+      v-model="groupDialog"
+      persistent
+      width="500px"
+    >
+      <v-card>
+        <v-card-title>选择收益比例</v-card-title>
+        <v-card-text>
+          <v-select
+            v-model="groupId"
+            :items="groupItems"
+            label="收益比例"
+          />
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn @click="groupDialog = false">{{ t('cancel') }}</v-btn>
+          <v-btn @click="approveOrder">{{ t('submit') }}</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>

@@ -14,6 +14,7 @@ export const useAppStore = defineStore('app', {
     baseApiUrl,
     user: {
       id: null,
+      documentId: null,
       username: '',
       email: '',
       avatar: '',
@@ -47,6 +48,7 @@ export const useAppStore = defineStore('app', {
       this.user.username = payload.username
       this.user.email = payload.email
       this.user.id = payload.id
+      this.user.documentId = payload.documentId
       if (payload.avatar) {
         this.user.avatar = payload.avatar.url
       }
@@ -79,6 +81,7 @@ export const useAppStore = defineStore('app', {
       this.token = ''
       localStorage.removeItem(TokenKey)
       this.user.id = null
+      this.user.documentId = null
       this.user.username = ''
       this.user.email = ''
       this.user.avatar = ''
@@ -146,6 +149,7 @@ export const useAppStore = defineStore('app', {
     userLoginSuccess (payload: any) {
       this.token = payload.jwt
       this.user.id = payload.user.id
+      this.user.documentId = payload.documentId
       this.user.username = payload.user.username
       this.user.email = payload.user.email
       if (payload.user.avatar) {

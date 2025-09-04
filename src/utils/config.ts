@@ -1,4 +1,5 @@
 import type { MenuItem, UserRole } from '@/utils/interface.ts'
+import { t } from '@/utils/helper'
 
 /**
  * Created by Emmett Wen on 2023/12/1.
@@ -10,16 +11,17 @@ export const adminMenu = [
   { title: '主页', link: '/', icon: 'mdi-monitor-dashboard' },
   { title: '产品管理', link: '/items', icon: 'mdi-license' },
   { title: '订单审核和管理', link: '/orders', icon: 'mdi-order-bool-descending-variant' },
+  { title: '系统设置', link: '/settings', icon: 'mdi-cog' },
   { title: '修改密码', link: '/change-password', icon: 'mdi-lock-reset' },
 ]
 const defaultMenu = [
-  { title: '主页', link: '/', icon: 'mdi-monitor-dashboard' },
-  { title: '购买/升级产品', link: '/products', icon: 'mdi-license' },
-  { title: '购买记录', link: '/payment-history', icon: 'mdi-account-credit-card' },
-  { title: '修改密码', link: '/change-password', icon: 'mdi-lock-reset' },
+  { title: t('menu.home'), link: '/', icon: 'mdi-monitor-dashboard' },
+  { title: t('menu.buy'), link: '/products', icon: 'mdi-license' },
+  { title: t('menu.paymentHistory'), link: '/payment-history', icon: 'mdi-account-credit-card' },
+  { title: t('changePassword'), link: '/change-password', icon: 'mdi-lock-reset' },
 ]
 export const getMenu = (role: UserRole): MenuItem[] => {
-  switch (role.name) {
+  switch (role?.name) {
     case 'Admin': { return adminMenu as MenuItem[]
     }
     default: {
@@ -53,28 +55,12 @@ export const engineType = {
   hybrid: '混动',
   electric: '纯电',
 }
-export const engineTypeList = [
-  { title: '汽油', value: 'gasoline' },
-  { title: '柴油', value: 'diesel' },
-  { title: '混动', value: 'hybrid' },
-  { title: '纯电', value: 'electric' },
-]
 
 export const driveType = {
   'AWD/4WD': '四驱',
   'Front Wheel Drive': '前驱',
   'Rear Wheel Drive': '后驱',
 }
-export const driveTypeList = [
-  { title: '四驱', value: 'AWD/4WD' },
-  { title: '前驱', value: 'Front Wheel Drive' },
-  { title: '后驱', value: 'Rear Wheel Drive' },
-]
-
-export const transmissionList = [
-  { title: '自动挡', value: 'automatic' },
-  { title: '前驱', value: 'manual' },
-]
 
 const config = {
   baseUrl,

@@ -6,6 +6,7 @@
 
 // Types
 import type { App } from 'vue'
+import i18n from '@/plugins/i18n'
 import router from '@/router'
 import pinia from '@/store'
 
@@ -17,4 +18,5 @@ export function registerPlugins (app: App) {
     .use(vuetify)
     .use(router)
     .use(pinia)
+    .use(i18n)
 }

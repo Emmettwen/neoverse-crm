@@ -1,15 +1,17 @@
 <script setup lang="ts">
   import QrcodeVue from 'qrcode.vue'
-  import { computed, ref } from 'vue'
+  import {computed, onMounted, ref} from 'vue'
+  import { useI18n } from 'vue-i18n'
   import { useRouter } from 'vue-router'
   import { useAppStore } from '@/store/app.ts'
   import api from '@/utils/api'
   import { message } from '@/utils/helper.ts'
   import request from '@/utils/request.ts'
 
+  const { t } = useI18n()
   const store = useAppStore()
   const router = useRouter()
-  const rechargeCode = ref('asjdasldjladkjalskdjaslkdjasldkj')
+  const paymentCode = ref('')
   const paymentPic = ref<File>()
 
   const canSubmit = computed(() => {
@@ -25,10 +27,18 @@
         payment: pic[0].id,
       },
     }).then(() => {
-      message.success('提交成功！请等待审核.')
+      message.success(t('success.submit'))
       router.replace('/payment-history')
     })
   }
+
+  onMounted(async () => {
+    request({
+      ...api.SETTINGS,
+    }).then(res => {
+      paymentCode.value = res.data.paymentCode
+    })
+  })
 </script>
 
 <template>
@@ -36,10 +46,10 @@
     <v-table>
       <thead>
         <tr>
-          <td>Name</td>
-          <td>Qty</td>
-          <td>Unit Price</td>
-          <td class="text-right">Price</td>
+          <td>{{ t('product.name') }}</td>
+          <td>{{ t('product.qty') }}</td>
+          <td>{{ t('checkout.unitPrice') }}</td>
+          <td class="text-right">{{ t('product.price') }}</td>
         </tr>
       </thead>
       <tbody>
@@ -50,11 +60,11 @@
           <td class="text-right">${{ store.cartItems.amount * store.cartItems.price }}</td>
         </tr>
         <tr>
-          <td class="text-right" colspan="3">Subtotal</td>
+          <td class="text-right" colspan="3">{{ t('checkout.subtotal') }}</td>
           <td class="text-right">${{ store.cartItems.amount * store.cartItems.price }}</td>
         </tr>
         <tr>
-          <td class="text-right" colspan="3">Total</td>
+          <td class="text-right" colspan="3">{{ t('checkout.total') }}</td>
           <td class="text-right">${{ store.cartItems.amount * store.cartItems.price }}</td>
         </tr>
       </tbody>
@@ -66,10 +76,11 @@
       <v-col cols="12" sm="6">
         <div class="text-center">
           <QrcodeVue
+            v-if="paymentCode"
             class="my-4"
             level="H"
             :size="250"
-            :value="rechargeCode"
+            :value="paymentCode"
           />
         </div>
       </v-col>
@@ -78,7 +89,7 @@
           v-model="paymentPic"
           accept="image/*"
           density="comfortable"
-          title="上传支付凭证"
+          :title="t('checkout.uploadScreenshot')"
         />
       </v-col>
     </v-row>
@@ -90,7 +101,7 @@
     color="primary"
     :disabled="!canSubmit"
     @click="placeOrder"
-  >Subscribe And Pay</v-btn>
+  >{{ t('submit') }}</v-btn>
 </template>
 
 <style scoped>

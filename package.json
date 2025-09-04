@@ -40,6 +40,7 @@
     "v-phone-input": "^4.1.2",
     "vue": "^3.5.17",
     "vue-draggable-next": "^2.2.1",
+    "vue-i18n": "11",
     "vue-router": "^4.0.0",
     "vue-signature-pad": "^3.0.2",
     "vue3-apexcharts": "^1.5.2",

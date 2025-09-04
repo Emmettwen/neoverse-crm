@@ -21,6 +21,28 @@
     </div>
     <v-spacer />
 
+    <v-select
+      v-if="mdAndUp"
+      v-model="currentLanguage"
+      class="vertical-center"
+      density="compact"
+      hide-details
+      item-title="text"
+      item-value="value"
+      :items="langOptions"
+      :label="t('language')"
+      max-width="140px"
+      variant="plain"
+    >
+      <template #prepend>
+        <v-icon class="opacity-100 mt-1" size="18px">
+          mdi-web
+        </v-icon>
+      </template>
+      <template #item="{ props }">
+        <v-list-item v-bind="props" density="compact" />
+      </template>
+    </v-select>
     <v-menu open-on-hover>
       <template #activator="{ props }">
         <v-btn
@@ -31,14 +53,14 @@
       </template>
       <v-list>
         <v-list-item append-icon="mdi-content-copy">
-          ID: {{ store.user.id }}
+          ID: {{ store.user.documentId }}
         </v-list-item>
         <v-divider />
         <v-list-item
           append-icon="mdi-logout"
           link
           @click="store.userLogout"
-        >退出登录
+        >{{ t('logout') }}
         </v-list-item>
       </v-list>
     </v-menu>
@@ -48,57 +70,34 @@
 <script lang="ts" setup>
   // @ts-ignore
   import type { BreadcrumbItem } from 'vuetify/lib/components/VBreadcrumbs/VBreadcrumbs'
-  import type { Rate } from '@/utils/interface'
   import { computed, ref } from 'vue'
+  import { useI18n } from 'vue-i18n'
   import { useRoute } from 'vue-router'
+  import { useDisplay } from 'vuetify'
   import { useAppStore } from '@/store/app'
-  import { useHelperStore } from '@/store/helper'
-  import { getCurrencySymbol } from '@/utils/helper'
+
+  const { locale, t } = useI18n()
 
   const store = useAppStore()
-  const helperStore = useHelperStore()
+  const { mdAndUp } = useDisplay()
 
-  const setDisplayRate = (target: Rate | any) => {
-    switch (target.to) {
-      case 'CNY': {
-        helperStore.displayRate = {
-          locale: 'zh-CN',
-          currency: target.to,
-          rate: target.rate,
-        }
-
-        break
-      }
-      case 'USD': {
-        helperStore.displayRate = {
-          locale: 'en-US',
-          currency: target.to,
-          rate: target.rate,
-        }
-
-        break
-      }
-      case 'EUR': {
-        helperStore.displayRate = {
-          locale: 'de-DE',
-          currency: target.to,
-          rate: target.rate,
-        }
-
-        break
-      }
-      default: {
-        helperStore.displayRate = {
-          locale: 'ru-RU',
-          currency: 'RUB',
-          rate: 1,
-        }
-      }
-    }
-  }
+  const langOptions = [
+    { text: 'English', value: 'en' },
+    { text: '简体中文', value: 'zhHans' },
+  ]
 
   const title = ref('EA CRM 系统')
   const route = useRoute()
+
+  const currentLanguage = computed({
+    get () {
+      return locale.value
+    },
+    set (val) {
+      locale.value = val
+      localStorage.setItem('lang', val)
+    },
+  })
 
   const breadcrumbs = computed(() => {
     const matchedRoutes = route.matched.filter(route => route.name)

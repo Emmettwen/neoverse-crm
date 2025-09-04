@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import type { Product } from '@/utils/interface.ts'
   import { computed, ref, watch } from 'vue'
+  import { useI18n } from 'vue-i18n'
   import { useRouter } from 'vue-router'
   import { useAppStore } from '@/store/app'
   import { useTableServer } from '@/utils/hooks.ts'
@@ -8,11 +9,12 @@
   defineOptions({
     name: 'Products',
   })
+  const { t } = useI18n()
   const store = useAppStore()
   const router = useRouter()
-  const headers = ref([
-    { title: '产品名称', key: 'name' },
-    { title: '数量', key: 'amount', align: 'center' },
+  const headers = computed(() => [
+    { title: t('product.name'), key: 'name' },
+    { title: t('product.qty'), key: 'amount', align: 'center' },
   ] as const)
   const selected = ref([])
   const amount = ref(0)
@@ -67,15 +69,15 @@
   <v-sheet class="my-8" color="grey-lighten-3">
     <v-row align="center" class="px-4">
       <v-col cols="3">
-        <b>Payment System</b>
+        <b>{{ t('product.paymentSystem') }}</b>
       </v-col>
       <v-col cols="9">
-        <h3>Checkout</h3>
-        <p>Only USDT issued by TRC20 protocol is accepted for payment. Please do not deposit other digital assets into the receiving wallet address.</p>
+        <h3>{{ t('product.checkout') }}</h3>
+        <p>{{ t('product.checkoutInformation') }}</p>
       </v-col>
     </v-row>
   </v-sheet>
-  <v-btn color="primary" :disabled="canNext" @click="onClickNext">下一步</v-btn>
+  <v-btn color="primary" :disabled="canNext" @click="onClickNext">{{ t('next') }}</v-btn>
 </template>
 
 <style scoped>

@@ -1,10 +1,11 @@
 <script setup lang="ts">
   import type { Order } from '@/utils/interface.ts'
-  import { computed, ref } from 'vue'
-  import { useAppStore } from '@/store/app.ts'
+  import { ref } from 'vue'
+  import { useI18n } from 'vue-i18n'
   import { useTableServer } from '@/utils/hooks.ts'
 
-  const store = useAppStore()
+  const { t } = useI18n()
+
 
   const {
     items,
@@ -25,7 +26,7 @@
 <template>
   <v-card flat>
     <v-card-title class="d-flex align-center">
-      Active Subscriptions
+      {{ t('activeSubscription') }}
     </v-card-title>
     <v-divider />
     <v-data-table-server

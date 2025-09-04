@@ -1,14 +1,13 @@
 <script setup lang="ts">
   import type { Order } from '@/utils/interface'
-  import ct from 'i18n-iso-countries'
-  import zhCt from 'i18n-iso-countries/langs/zh.json'
-  import { onMounted, ref } from 'vue'
+  import { computed, ref } from 'vue'
+  import { useI18n } from 'vue-i18n'
   import api from '@/utils/api'
   import { copyText, message } from '@/utils/helper.ts'
   import { useTableServer } from '@/utils/hooks'
   import request from '@/utils/request.ts'
 
-  ct.registerLocale(zhCt)
+  const { t } = useI18n()
 
   defineOptions({
     name: 'PaymentHistory',
@@ -26,11 +25,11 @@
     totalItems,
     loadItems,
   } = useTableServer<Order>('order', ['product'])
-  const headers = ref([
-    { title: 'Order Number', key: 'documentId' },
-    { title: 'Product', key: 'product.name' },
-    { title: 'Status', key: 'orderStatus' },
-    { title: 'Machine Code', key: 'code' },
+  const headers = computed(() => [
+    { title: t('order.orderNumber'), key: 'documentId' },
+    { title: t('order.product'), key: 'product.name' },
+    { title: t('order.status'), key: 'orderStatus' },
+    { title: t('order.machineCode'), key: 'code' },
     { title: 'Broker Name', key: 'brokerName' },
     { title: 'Broker Server', key: 'brokerServer' },
     { title: 'Transaction Account', key: 'transactionAccount' },
@@ -45,7 +44,7 @@
         transactionAccount: account.value,
       },
     }).then(() => {
-      message.success('绑定成功！')
+      message.success(t('success.bind'))
       collapseRow(id)
       loadItems()
     })
@@ -134,7 +133,7 @@
                 <v-btn
                   block
                   color="primary"
-                  text="Submit"
+                  :text="t('submit')"
                   @click="submitBinding(item.documentId, item.id)"
                 />
               </v-col>

@@ -67,6 +67,8 @@ const api = {
   CHANGE_PASSWORD: { url: '/auth/change-password', method: 'post', loading: true },
   UPLOAD: { url: '/upload', method: 'post', loading: true },
   DELETE_FILE: (id: number) => ({ url: '/upload/files/' + id, method: 'delete', loading: true }),
+  SETTINGS: { url: '/setting', method: 'get', loading: true },
+  SETTINGS_UPDATE: { url: '/setting', method: 'put', loading: true },
 }
 
 export default api

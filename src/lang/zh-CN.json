@@ -1,0 +1,60 @@
+{
+  "language": "语言",
+  "usefulLinks": "有用链接",
+  "changePassword": "修改密码",
+  "buyLicense": "购买许可证",
+  "logout": "登出",
+  "activeSubscription": "主动订阅",
+  "cancel": "取消",
+  "error": {
+    "addInformation": "请添加信息。",
+    "passwordNotMatch": "两个密码不同，请重新输入。"
+  },
+  "product": {
+    "actions": "操作",
+    "addNewProduct": "新产品",
+    "day": "天",
+    "disabled": "禁用",
+    "displayName": "显示名称",
+    "duration": "持续时间（天）",
+    "name": "产品名称",
+    "price": "价格（$）",
+    "checkout": "查看",
+    "checkoutInformation": "仅接受由TRC20协议发行的USDT进行付款。\n请不要将其他数字资产存入接收钱包地址。",
+    "paymentSystem": "付款系统",
+    "qty": "数量"
+  },
+  "submit": "提交",
+  "success": {
+    "create": "创造成功",
+    "update": "更新成功",
+    "submit": "提交成功！请等待审核。",
+    "bind": "绑定成功"
+  },
+  "checkout": {
+    "approve": "批准成功",
+    "subtotal": "小计",
+    "total": "总价",
+    "unitPrice": "单价",
+    "uploadScreenshot": "上传付款收据或者截图"
+  },
+  "close": "关闭",
+  "currentPassword": "当前密码",
+  "newPassword": "新密码",
+  "next": "下一个",
+  "order": {
+    "confirmMessage": "审核通过并生成订单：{id}的密钥？",
+    "machineCode": "机器代码",
+    "orderNumber": "订单号",
+    "product": "产品",
+    "receipt": "付款收据",
+    "status": "状态",
+    "customer": "用户"
+  },
+  "passwordConfirmation": "确认密码",
+  "menu": {
+    "buy": "购买/升级产品",
+    "home": "家",
+    "paymentHistory": "付款历史记录"
+  }
+}

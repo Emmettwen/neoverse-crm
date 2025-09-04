@@ -1,8 +1,9 @@
 <script setup lang="ts">
   import type { Product } from '@/utils/interface.ts'
-  import { ref } from 'vue'
+  import { computed, ref } from 'vue'
+  import { useI18n } from 'vue-i18n'
   import api from '@/utils/api.ts'
-  import { getThumbnail, message } from '@/utils/helper.ts'
+  import { message } from '@/utils/helper.ts'
   import { useTableServer } from '@/utils/hooks.ts'
   import request from '@/utils/request.ts'
   import { requiredRegex } from '@/utils/rules.ts'
@@ -11,6 +12,7 @@
     name: 'ProductList',
   })
 
+  const { t } = useI18n()
   const name = ref()
   const displayName = ref()
   const price = ref(0)
@@ -31,19 +33,19 @@
     deleteItem,
     currentPage,
   } = useTableServer<Product>('product')
-  const headers = ref([
-    { title: '名称', key: 'name' },
-    { title: '展示名称', key: 'displayName' },
-    { title: '价格($)', key: 'price' },
-    { title: '时长(天)', key: 'duration' },
-    { title: '禁用', key: 'disabled' },
-    { title: '操作', key: 'actions' },
+  const headers = computed(() => [
+    { title: t('product.name'), key: 'name' },
+    { title: t('product.displayName'), key: 'displayName' },
+    { title: t('product.price'), key: 'price' },
+    { title: t('product.duration'), key: 'duration' },
+    { title: t('product.disabled'), key: 'disabled' },
+    { title: t('product.actions'), key: 'actions' },
   ])
 
   const handleSubmit = async () => {
     const { valid } = await form.value.validate()
     if (!valid) {
-      message.error('请补充信息')
+      message.error(t('error.addInformation'))
       return
     }
     if (edit.value) {
@@ -58,7 +60,7 @@
           },
         },
       }).then(() => {
-        message.success('修改成功')
+        message.success(t('success.update'))
         productDialog.value = false
         loadItems()
       })
@@ -75,7 +77,7 @@
           },
         },
       }).then(() => {
-        message.success('创建成功')
+        message.success(t('product.create'))
         productDialog.value = false
         loadItems()
       })
@@ -110,7 +112,7 @@
         },
       },
     }).then(() => {
-      message.success('更新成功')
+      message.success(t('product.update'))
     })
   }
 </script>
@@ -121,20 +123,20 @@
       <v-spacer />
       <v-btn
         color="primary"
-        text="添加新产品"
+        :text="t('product.addNewProduct')"
         variant="flat"
         @click="createItem"
       />
       <v-dialog v-model="productDialog" max-width="500">
         <v-form ref="form" v-model="formValid" @submit.prevent="handleSubmit">
-          <v-card title="添加新产品">
+          <v-card :title="t('product.addNewProduct')">
             <v-card-text>
               <v-row>
                 <v-col cols="12">
                   <v-text-field
                     v-model="name"
                     density="comfortable"
-                    label="名称"
+                    :label="t('product.name')"
                     :rules="[requiredRegex]"
                     variant="outlined"
                   />
@@ -143,7 +145,7 @@
                   <v-text-field
                     v-model="displayName"
                     density="comfortable"
-                    label="展示名称"
+                    :label="t('product.displayName')"
                     :rules="[requiredRegex]"
                     variant="outlined"
                   />
@@ -152,7 +154,7 @@
                   <v-text-field
                     v-model="price"
                     density="comfortable"
-                    label="价格"
+                    :label="t('product.price')"
                     prefix="$"
                     :rules="[requiredRegex]"
                     type="number"
@@ -163,7 +165,7 @@
                   <v-text-field
                     v-model="duration"
                     density="comfortable"
-                    label="时长"
+                    :label="t('product.duration')"
                     :rules="[requiredRegex]"
                     suffix="天"
                     type="number"
@@ -177,13 +179,13 @@
               <v-spacer />
 
               <v-btn
-                text="取消"
+                :text="t('cancel')"
                 @click="productDialog = false"
               />
               <v-btn
                 class="ml-2"
                 color="primary"
-                text="提交"
+                :text="t('submit')"
                 type="submit"
               />
             </v-card-actions>

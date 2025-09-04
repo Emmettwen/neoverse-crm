@@ -1,0 +1,60 @@
+{
+  "language": "Language",
+  "usefulLinks": "Useful Links",
+  "changePassword": "ChangePassword",
+  "buyLicense": "Buy a license",
+  "logout": "Logout",
+  "activeSubscription": "Active Subscriptions",
+  "product": {
+    "name": "Product Name",
+    "displayName": "Display Name",
+    "price": "Price($)",
+    "duration": "Duration(days)",
+    "disabled": "Disabled",
+    "actions": "Actions",
+    "addNewProduct": "New Product",
+    "day": "Days",
+    "qty": "Quantity",
+    "paymentSystem": "Payment System",
+    "checkout": "Checkout",
+    "checkoutInformation": "Only USDT issued by TRC20 protocol is accepted for payment. Please do not deposit other digital assets into the receiving wallet address."
+  },
+  "error": {
+    "addInformation": "Please add information.",
+    "passwordNotMatch": "The two passwords are different, please re-enter."
+  },
+  "success": {
+    "update": "Update successful",
+    "create": "Create successful",
+    "submit": "Submission successful! Please wait for review.",
+    "bind": "Binding successful"
+  },
+  "submit": "Submit",
+  "cancel": "Cancel",
+  "next": "Next",
+  "close": "Close",
+  "currentPassword": "Current Password",
+  "newPassword": "New Password",
+  "passwordConfirmation": "Confirm Password",
+  "checkout": {
+    "unitPrice": "Unit Price",
+    "subtotal": "Subtotal",
+    "total": "Total",
+    "uploadScreenshot": "Upload payment receipt",
+    "approve": "Approval successful"
+  },
+  "order": {
+    "orderNumber": "Order Number",
+    "product": "Product",
+    "status": "Status",
+    "machineCode": "Machine Code",
+    "confirmMessage": "Approve and issue the key for order: {id}?",
+    "receipt": "Payment receipt",
+    "customer": "Customer"
+  },
+  "menu": {
+    "home": "Home",
+    "buy": "Buy/upgrade product",
+    "paymentHistory": "Payment History"
+  }
+}

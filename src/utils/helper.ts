@@ -3,6 +3,7 @@ import type { Car, Media, Trim } from '@/utils/interface'
  * Created by Emmett Wen on 2023/12/3.
  */
 import axios from 'axios'
+import i18n from '@/plugins/i18n.ts'
 import { useAppStore } from '@/store/app'
 import { baseUrl, orderStatus } from '@/utils/config'
 
@@ -168,6 +169,9 @@ function copyText (target: string) {
   // 移除临时创建的 textarea
   tempTextarea.remove()
 }
+function t (key: string, params?: any) {
+  return i18n.global.t(key, params)
+}
 
 export {
   copyText,
@@ -183,4 +187,5 @@ export {
   isFile,
   isVideo,
   message,
+  t,
 }

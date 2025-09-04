@@ -14,6 +14,7 @@ import Items from '@/views/items/Index.vue'
 import Orders from '@/views/orders/Index.vue'
 import PaymentHistory from '@/views/PaymentHistory.vue'
 import Products from '@/views/product/Index.vue'
+import Setting from "@/views/Setting.vue";
 
 const routes = [
   {
@@ -66,6 +67,11 @@ const routes = [
         name: '购买记录',
         component: PaymentHistory,
         meta: { requireAuth: true, title: '订单' },
+      }, {
+        path: '/settings',
+        name: '设置',
+        component: Setting,
+        meta: { requireAuth: true, title: '设置' },
       }, {
         path: 'login',
         name: 'Login',
