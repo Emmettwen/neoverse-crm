@@ -27,7 +27,7 @@
 
 <style scoped>
 .page-main {
-  background-image: url("@/assets/neoverse-bg.jpg");
+  background-image: url("@/assets/neo-bg.jpg");
   background-size: cover;
   background-position: center;
 }
