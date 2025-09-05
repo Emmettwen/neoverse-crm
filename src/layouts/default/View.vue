@@ -1,5 +1,5 @@
 <template>
-  <v-main>
+  <v-main class="page-main">
     <v-container>
       <router-view />
       <LiveChatWidget
@@ -24,3 +24,11 @@
     console.log('LiveChatWidget.onNewEvent', event)
   }
 </script>
+
+<style scoped>
+.page-main {
+  background-image: url("@/assets/neoverse-bg.jpg");
+  background-size: cover;
+  background-position: center;
+}
+</style>
