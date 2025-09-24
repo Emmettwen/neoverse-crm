@@ -14,6 +14,8 @@ declare module 'vue' {
     CustomerForm: typeof import('./components/Customer/CustomerForm.vue')['default']
     CustomerInfo: typeof import('./components/OrderDetail/CustomerInfo.vue')['default']
     HelloWorld: typeof import('./components/HelloWorld.vue')['default']
+    KeyList: typeof import('./components/Order/KeyList.vue')['default']
+    KeySingle: typeof import('./components/Order/KeySingle.vue')['default']
     MakeDialog: typeof import('./components/car/MakeDialog.vue')['default']
     ModelDialog: typeof import('./components/car/ModelDialog.vue')['default']
     OrderInfo: typeof import('./components/OrderDetail/OrderInfo.vue')['default']

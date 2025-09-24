@@ -31,6 +31,18 @@ const api = {
   color: createApiConfig('colors'),
   customer: createApiConfig('customers'),
   exchange: createApiConfig('exchanges'),
+  key: createApiConfig('keys', {
+    unbind: id => ({
+      url: `/keys/${id}/unbind`,
+      method: 'post',
+      loading: true,
+    }) as CustomConfig,
+    customerUnbind: id => ({
+      url: `/keys/${id}/customer-unbind`,
+      method: 'post',
+      loading: true,
+    }) as CustomConfig,
+  }),
   location: createApiConfig('locations'),
   make: createApiConfig('makes'),
   model: createApiConfig('models'),
@@ -48,6 +60,16 @@ const api = {
     }) as CustomConfig,
     bind: id => ({
       url: `/orders/${id}/bind`,
+      method: 'post',
+      loading: true,
+    }) as CustomConfig,
+    unbind: id => ({
+      url: `/orders/${id}/unbind`,
+      method: 'post',
+      loading: true,
+    }) as CustomConfig,
+    customerUnbind: id => ({
+      url: `/orders/${id}/customer-unbind`,
       method: 'post',
       loading: true,
     }) as CustomConfig,

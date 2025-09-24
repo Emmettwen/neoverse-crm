@@ -1,7 +1,7 @@
 import type { ApiNamespace } from '@/utils/api'
 import type { ApiResourceConfig } from '@/utils/interface'
 import _ from 'lodash'
-import { onMounted, ref } from 'vue'
+import {onMounted, reactive, ref} from 'vue'
 import api from '@/utils/api'
 import { message } from '@/utils/helper.ts'
 import request from '@/utils/request'
@@ -42,7 +42,7 @@ export function useTableServer<T> (namespace: ApiNamespace, populate?: string[],
           page,
           pageSize: itemsPerPage,
         },
-        sort: sortBy.map((sort: any) => {
+        sort: (sortBy || []).map((sort: any) => {
           return sort.key + ':' + sort.order
         }),
         filters: tmp.value,
@@ -75,8 +75,6 @@ export function useTableServer<T> (namespace: ApiNamespace, populate?: string[],
       })
     }
   }
-
-  onMounted(() => loadItems({}))
 
   return {
     deleteItem,

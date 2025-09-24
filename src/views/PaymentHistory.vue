@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import type { Order } from '@/utils/interface'
+  import dayjs from 'dayjs'
   import { computed, ref } from 'vue'
   import { useI18n } from 'vue-i18n'
   import api from '@/utils/api'
@@ -16,6 +17,7 @@
   const server = ref()
   const account = ref()
   const expanded = ref([])
+  const sortBy = ref([{ key: 'createdAt', order: 'desc' }])
 
   const {
     items,
@@ -24,15 +26,16 @@
     loading,
     totalItems,
     loadItems,
-  } = useTableServer<Order>('order', ['product'])
+  } = useTableServer<Order>('order', ['product', 'keys'])
   const headers = computed(() => [
-    { title: t('order.orderNumber'), key: 'documentId' },
-    { title: t('order.product'), key: 'product.name' },
-    { title: t('order.status'), key: 'orderStatus' },
-    { title: t('order.machineCode'), key: 'code' },
-    { title: 'Broker Name', key: 'brokerName' },
-    { title: 'Broker Server', key: 'brokerServer' },
-    { title: 'Transaction Account', key: 'transactionAccount' },
+    { title: t('order.orderNumber'), key: 'documentId', sortable: false },
+    { title: t('order.product'), key: 'product.name', sortable: false },
+    { title: t('order.status'), key: 'orderStatus', sortable: false },
+    { title: t('order.machineCode'), key: 'code', sortable: false },
+    { title: 'Broker Name', key: 'brokerName', sortable: false },
+    { title: 'Broker Server', key: 'brokerServer', sortable: false },
+    { title: 'Transaction Account', key: 'transactionAccount', sortable: false },
+    { title: t('order.date'), key: 'createdAt' },
   ] as const)
 
   const submitBinding = (documentId: string, id: number) => {
@@ -64,6 +67,7 @@
     <v-data-table-server
       v-model:expanded="expanded"
       v-model:items-per-page="pageSize"
+      v-model:sort-by="sortBy"
       :headers="headers"
       :items="items"
       :items-length="totalItems"
@@ -86,9 +90,11 @@
           />
         </div>
       </template>
-      <template #item.data-table-expand="{ internalItem, isExpanded, toggleExpand, item }">
+      <template #[`item.createdAt`]="{ value }">
+        {{ dayjs(value).format('YYYY-MM-DD HH:MM:ss').toString() }}
+      </template>
+      <template #item.data-table-expand="{ internalItem, isExpanded, toggleExpand }">
         <v-btn
-          v-if="item.orderStatus === 'approved'"
           :append-icon="isExpanded(internalItem) ? 'mdi-chevron-up' : 'mdi-chevron-down'"
           border
           class="text-none"
@@ -101,43 +107,14 @@
           @click="toggleExpand(internalItem)"
         />
       </template>
+
       <template #expanded-row="{ columns, item }">
         <tr>
           <td class="py-2" :colspan="columns.length">
-            <v-row align="center">
-              <v-col cols="12" md="3">
-                <v-text-field
-                  v-model="name"
-                  density="compact"
-                  hide-details
-                  label="Broker Name"
-                />
-              </v-col>
-              <v-col cols="12" md="3">
-                <v-text-field
-                  v-model="server"
-                  density="compact"
-                  hide-details
-                  label="Broker Server"
-                />
-              </v-col>
-              <v-col cols="12" md="3">
-                <v-text-field
-                  v-model="account"
-                  density="compact"
-                  hide-details
-                  label="Transaction Account"
-                />
-              </v-col>
-              <v-col cols="12" md="3">
-                <v-btn
-                  block
-                  color="primary"
-                  :text="t('submit')"
-                  @click="submitBinding(item.documentId, item.id)"
-                />
-              </v-col>
-            </v-row>
+            <v-sheet border class="pa-2">
+              <KeyList v-if="item.keys?.length > 0" v-model="item.documentId" />
+              <KeySingle v-else v-model="item.documentId" />
+            </v-sheet>
           </td>
         </tr>
       </template>

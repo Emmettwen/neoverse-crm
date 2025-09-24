@@ -144,6 +144,7 @@ export interface Order extends BaseApi {
   binding: string
   endDate: string
   generatedDate: string
+  keys: Key[]
   customer: User
   productName: string
   price: number
@@ -249,6 +250,17 @@ export interface Rate extends BaseApi {
   from: string
   to: string
   rate: number
+}
+
+export interface Key extends BaseApi {
+  code: string
+  duration: number
+  brokerServer: string
+  brokerName: string
+  transactionAccount: string
+  binded: string
+  endDate: string
+  generatedDate: Date
 }
 
 type FieldType =

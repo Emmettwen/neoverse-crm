@@ -5,6 +5,7 @@
   "buyLicense": "Buy a license",
   "logout": "Logout",
   "activeSubscription": "Active Subscriptions",
+  "unbind": "unbind",
   "product": {
     "name": "Product Name",
     "displayName": "Display Name",
@@ -27,7 +28,8 @@
     "update": "Update successful",
     "create": "Create successful",
     "submit": "Submission successful! Please wait for review.",
-    "bind": "Binding successful"
+    "bind": "Binding successful",
+    "unbind": "Unbind successful"
   },
   "submit": "Submit",
   "cancel": "Cancel",

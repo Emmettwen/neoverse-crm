@@ -2,11 +2,13 @@
   import type { Order } from '@/utils/interface'
   import { computed, ref } from 'vue'
   import { useI18n } from 'vue-i18n'
+  import { useAppStore } from '@/store/app.ts'
   import api from '@/utils/api'
   import { copyText, getImageUrl, message } from '@/utils/helper'
   import { useTableServer } from '@/utils/hooks'
   import request from '@/utils/request'
 
+  const store = useAppStore()
   const { t } = useI18n()
   defineOptions({
     name: 'OrderList',
@@ -18,21 +20,17 @@
     loading,
     totalItems,
     loadItems,
-  } = useTableServer<Order>('order', ['product', 'paymentPic', 'customer'])
+  } = useTableServer<Order>('order', ['product', 'paymentPic', 'customer', 'keys'])
   const headers = computed(() => [
     { title: t('order.orderNumber'), key: 'documentId', sortable: false },
     { title: t('order.product'), key: 'product.name', sortable: false },
     { title: t('order.customer'), key: 'customer.username', sortable: false },
     { title: t('order.status'), key: 'orderStatus', sortable: false },
-    { title: t('order.machineCode'), key: 'code', sortable: false },
-    { title: 'Broker Name', key: 'brokerName', sortable: false },
-    { title: 'Broker Server', key: 'brokerServer', sortable: false },
-    { title: 'Transaction Account', key: 'transactionAccount', sortable: false },
     { title: t('product.qty'), key: 'qty', sortable: false },
     { title: t('checkout.total'), key: 'total', sortable: false },
     { title: t('product.duration'), key: 'duration', sortable: false },
     { title: '收益', key: 'group', sortable: false },
-    { title: t('product.actions'), key: 'actions', align: 'end' },
+    { title: t('product.actions'), key: 'actions', align: 'end', sortable: false },
   ] as const)
 
   const dialog = ref(false)
@@ -70,7 +68,7 @@
       })
     }
   }
-  const onClickServerInformation = (item) => {
+  const onClickServerInformation = item => {
     serverTarget.value = item
     name.value = item.brokerName
     server.value = item.brokerServer
@@ -135,19 +133,20 @@
       :items-length="totalItems"
       :loading="loading"
       :search="search"
+      show-expand
       @update:options="loadItems"
     >
-      <template #[`item.code`]="{value}">
-        <div v-if="value" class="d-flex align-center">
+      <template #[`item.code`]="{ item }">
+        <div class="d-flex align-center">
           <span
             class="d-inline-block text-truncate"
             style="max-width: 120px"
-          >{{ value }}</span>
+          >{{ item.code }}</span>
           <v-btn
             icon="mdi-content-copy"
             size="small"
             variant="text"
-            @click="copyText(value)"
+            @click="copyText(item.code)"
           />
         </div>
       </template>
@@ -172,20 +171,6 @@
             支付凭证
           </div>
         </v-tooltip>
-        <v-tooltip interactive location="top">
-          <template #activator="{ props: activatorProps }">
-            <v-btn
-              v-bind="activatorProps"
-              icon="mdi-server-network"
-              size="small"
-              variant="text"
-              @click="onClickServerInformation(item)"
-            />
-          </template>
-          <div>
-            绑定信息
-          </div>
-        </v-tooltip>
         <v-btn
           v-if="item.orderStatus === 'pending'"
           icon="mdi-check"
@@ -193,6 +178,16 @@
           variant="text"
           @click="chooseRate(item.documentId)"
         />
+      </template>
+      <template #expanded-row="{ columns, item }">
+        <tr>
+          <td class="py-2" :colspan="columns.length">
+            <v-sheet border class="pa-2">
+              <KeyList v-if="item.keys.length > 0" v-model="item.documentId" />
+              <KeySingle v-else v-model="item.documentId" />
+            </v-sheet>
+          </td>
+        </tr>
       </template>
     </v-data-table-server>
     <v-dialog
@@ -244,17 +239,17 @@
               v-model="name"
               density="compact"
               label="Broker Name"
-            ></v-text-field>
+            />
             <v-text-field
               v-model="server"
               density="compact"
               label="Broker Server"
-            ></v-text-field>
+            />
             <v-text-field
               v-model="account"
               density="compact"
               label="Transaction Account"
-            ></v-text-field>
+            />
           </v-form>
         </v-card-text>
         <v-card-actions>
