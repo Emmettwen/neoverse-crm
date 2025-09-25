@@ -114,14 +114,15 @@
     </v-col>
     <v-col cols="12" sm="2">
       <v-btn
-        block
         color="primary"
+        size="small"
         :text="t('submit')"
         @click="submitBinding"
       />
       <v-btn
-        block
+        class="ml-1"
         color="primary"
+        size="small"
         :text="t('unbind')"
         @click="unbind"
       />
