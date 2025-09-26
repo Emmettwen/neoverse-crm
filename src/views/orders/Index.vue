@@ -7,6 +7,7 @@
   import { copyText, getImageUrl, message } from '@/utils/helper'
   import { useTableServer } from '@/utils/hooks'
   import request from '@/utils/request'
+  import dayjs from "dayjs";
 
   const store = useAppStore()
   const { t } = useI18n()
@@ -30,6 +31,7 @@
     { title: t('checkout.total'), key: 'total', sortable: false },
     { title: t('product.duration'), key: 'duration', sortable: false },
     { title: '收益', key: 'group', sortable: false },
+    { title: t('order.date'), key: 'createdAt' },
     { title: t('product.actions'), key: 'actions', align: 'end', sortable: false },
   ] as const)
 
@@ -48,6 +50,7 @@
   const name = ref()
   const server = ref()
   const account = ref()
+  const sortBy = ref([{ key: 'createdAt', order: 'desc' }])
 
   const chooseRate = (documentId: string) => {
     target.value = documentId
@@ -128,6 +131,7 @@
     <v-divider />
     <v-data-table-server
       v-model:items-per-page="pageSize"
+      v-model:sort-by="sortBy"
       :headers="headers"
       :items="items"
       :items-length="totalItems"
@@ -155,6 +159,9 @@
       </template>
       <template #[`item.customer`]="{value}">
         {{ value ? value.name : '' }}
+      </template>
+      <template #[`item.createdAt`]="{ value }">
+        {{ dayjs(value).format('YYYY-MM-DD HH:MM:ss').toString() }}
       </template>
       <template #[`item.actions`]="{item}">
         <v-tooltip interactive location="top">

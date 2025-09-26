@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import type { Product } from '@/utils/interface.ts'
-  import { computed, ref, watch } from 'vue'
+  import {computed, onMounted, ref, watch} from 'vue'
   import { useI18n } from 'vue-i18n'
   import { useRouter } from 'vue-router'
   import { useAppStore } from '@/store/app'
@@ -36,6 +36,9 @@
     store.updateCartItems(target)
     router.push('/checkout')
   }
+  onMounted(() => {
+    loadItems()
+  })
 </script>
 
 <template>
@@ -45,6 +48,7 @@
     hide-default-footer
     item-value="name"
     :items="items"
+    :loading="loading"
     select-strategy="single"
     show-select
   >

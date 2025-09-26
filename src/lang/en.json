@@ -52,7 +52,8 @@
     "machineCode": "Machine Code",
     "confirmMessage": "Approve and issue the key for order: {id}?",
     "receipt": "Payment receipt",
-    "customer": "Customer"
+    "customer": "Customer",
+    "date": "Date"
   },
   "menu": {
     "home": "Home",

@@ -1,22 +1,16 @@
 <script setup lang="ts">
   import type { Order } from '@/utils/interface'
   import dayjs from 'dayjs'
-  import { computed, ref } from 'vue'
+  import {computed, onMounted, ref} from 'vue'
   import { useI18n } from 'vue-i18n'
-  import api from '@/utils/api'
   import { copyText, message } from '@/utils/helper.ts'
   import { useTableServer } from '@/utils/hooks'
-  import request from '@/utils/request.ts'
 
   const { t } = useI18n()
 
   defineOptions({
     name: 'PaymentHistory',
   })
-  const name = ref()
-  const server = ref()
-  const account = ref()
-  const expanded = ref([])
   const sortBy = ref([{ key: 'createdAt', order: 'desc' }])
 
   const {
@@ -38,24 +32,6 @@
     { title: t('order.date'), key: 'createdAt' },
   ] as const)
 
-  const submitBinding = (documentId: string, id: number) => {
-    request({
-      ...api.order.bind(documentId),
-      data: {
-        brokerName: name.value,
-        brokerServer: server.value,
-        transactionAccount: account.value,
-      },
-    }).then(() => {
-      message.success(t('success.bind'))
-      collapseRow(id)
-      loadItems()
-    })
-  }
-  const collapseRow = (id: number) => {
-    // 主动收起：把该 id 从 expanded 中移除
-    expanded.value = expanded.value.filter(expandedId => expandedId !== id)
-  }
 </script>
 
 <template>
@@ -65,7 +41,6 @@
     </v-card-title>
     <v-divider />
     <v-data-table-server
-      v-model:expanded="expanded"
       v-model:items-per-page="pageSize"
       v-model:sort-by="sortBy"
       :headers="headers"
@@ -93,12 +68,13 @@
       <template #[`item.createdAt`]="{ value }">
         {{ dayjs(value).format('YYYY-MM-DD HH:MM:ss').toString() }}
       </template>
-      <template #item.data-table-expand="{ internalItem, isExpanded, toggleExpand }">
+      <template #item.data-table-expand="{ internalItem, isExpanded, toggleExpand, item }">
         <v-btn
           :append-icon="isExpanded(internalItem) ? 'mdi-chevron-up' : 'mdi-chevron-down'"
           border
           class="text-none"
           color="medium-emphasis"
+          :disabled="item.orderStatus === 'pending'"
           size="small"
           slim
           :text="isExpanded(internalItem) ? 'Collapse' : 'Binding'"

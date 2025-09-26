@@ -49,7 +49,8 @@
     "product": "产品",
     "receipt": "付款收据",
     "status": "状态",
-    "customer": "用户"
+    "customer": "用户",
+    "date": "日期"
   },
   "passwordConfirmation": "确认密码",
   "menu": {
