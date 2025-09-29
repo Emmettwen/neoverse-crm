@@ -25,10 +25,6 @@
     { title: t('order.orderNumber'), key: 'documentId', sortable: false },
     { title: t('order.product'), key: 'product.name', sortable: false },
     { title: t('order.status'), key: 'orderStatus', sortable: false },
-    { title: t('order.machineCode'), key: 'code', sortable: false },
-    { title: 'Broker Name', key: 'brokerName', sortable: false },
-    { title: 'Broker Server', key: 'brokerServer', sortable: false },
-    { title: 'Transaction Account', key: 'transactionAccount', sortable: false },
     { title: t('order.date'), key: 'createdAt' },
   ] as const)
 
@@ -51,20 +47,6 @@
       show-expand
       @update:options="loadItems"
     >
-      <template #[`item.code`]="{value}">
-        <div v-if="value" class="d-flex align-center">
-          <span
-            class="d-inline-block text-truncate"
-            style="max-width: 120px"
-          >{{ value }}</span>
-          <v-btn
-            icon="mdi-content-copy"
-            size="small"
-            variant="text"
-            @click="copyText(value)"
-          />
-        </div>
-      </template>
       <template #[`item.createdAt`]="{ value }">
         {{ dayjs(value).format('YYYY-MM-DD HH:MM:ss').toString() }}
       </template>
