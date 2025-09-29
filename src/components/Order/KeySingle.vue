@@ -5,7 +5,7 @@
   import { useI18n } from 'vue-i18n'
   import { useAppStore } from '@/store/app.ts'
   import api from '@/utils/api.ts'
-  import { message } from '@/utils/helper.ts'
+  import { copyText, message } from '@/utils/helper.ts'
   import request from '@/utils/request.ts'
 
   const store = useAppStore()
@@ -83,6 +83,20 @@
 <template>
   <v-row align="center">
     <v-col cols="12" sm="2">
+      <div v-if="order?.code" class="d-flex align-center">
+        <span
+          class="d-inline-block text-truncate"
+          style="max-width: 200px"
+        >{{ order?.code }}</span>
+        <v-btn
+          icon="mdi-content-copy"
+          size="small"
+          variant="text"
+          @click="copyText(order?.code)"
+        />
+      </div>
+    </v-col>
+    <v-col cols="12" sm="2">
       <v-text-field
         v-model="name"
         density="compact"
@@ -106,10 +120,10 @@
         label="Transaction Account"
       />
     </v-col>
-    <v-col cols="12" sm="2">
+    <v-col cols="12" sm="1">
       {{ dayjs(order?.endDate, "YYYYMMDD").format('YYYY-MM-DD').toString() }} 到期
     </v-col>
-    <v-col cols="12" sm="2">
+    <v-col cols="12" sm="1">
       {{ order?.orderStatus }}
     </v-col>
     <v-col cols="12" sm="2">
