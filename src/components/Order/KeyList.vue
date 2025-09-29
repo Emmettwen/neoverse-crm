@@ -191,7 +191,7 @@
     width="500px"
   >
     <v-card>
-      <v-card-title>已绑定信息</v-card-title>
+      <v-card-title>绑定信息</v-card-title>
       <v-card-text>
         <v-form>
           <v-text-field

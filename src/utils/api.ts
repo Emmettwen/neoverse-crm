@@ -42,6 +42,11 @@ const api = {
       method: 'post',
       loading: true,
     }) as CustomConfig,
+    bind: id => ({
+      url: `/keys/${id}/bind`,
+      method: 'post',
+      loading: true,
+    }) as CustomConfig,
   }),
   location: createApiConfig('locations'),
   make: createApiConfig('makes'),
