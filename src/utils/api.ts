@@ -47,6 +47,7 @@ const api = {
       method: 'post',
       loading: true,
     }) as CustomConfig,
+    verify: { url: '/keys/verify', method: 'post', loading: true } as CustomConfig,
   }),
   location: createApiConfig('locations'),
   make: createApiConfig('makes'),

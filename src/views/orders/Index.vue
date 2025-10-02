@@ -8,6 +8,7 @@
   import { useTableServer } from '@/utils/hooks'
   import request from '@/utils/request'
   import dayjs from "dayjs";
+  import EaCode from "@/components/base/EaCode.vue";
 
   const store = useAppStore()
   const { t } = useI18n()
@@ -141,18 +142,7 @@
       @update:options="loadItems"
     >
       <template #[`item.code`]="{ item }">
-        <div class="d-flex align-center">
-          <span
-            class="d-inline-block text-truncate"
-            style="max-width: 120px"
-          >{{ item.code }}</span>
-          <v-btn
-            icon="mdi-content-copy"
-            size="small"
-            variant="text"
-            @click="copyText(item.code)"
-          />
-        </div>
+        <EaCode v-model="item.code" />
       </template>
       <template #[`item.group`]="{ value }">
         {{ groupRate(value) }}

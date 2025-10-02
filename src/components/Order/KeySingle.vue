@@ -7,6 +7,7 @@
   import api from '@/utils/api.ts'
   import { copyText, message } from '@/utils/helper.ts'
   import request from '@/utils/request.ts'
+  import EaCode from "@/components/base/EaCode.vue";
 
   const store = useAppStore()
   const model = defineModel({ type: String, default: '' })
@@ -83,18 +84,7 @@
 <template>
   <v-row align="center">
     <v-col cols="12" sm="2">
-      <div v-if="order?.code" class="d-flex align-center">
-        <span
-          class="d-inline-block text-truncate"
-          style="max-width: 200px"
-        >{{ order?.code }}</span>
-        <v-btn
-          icon="mdi-content-copy"
-          size="small"
-          variant="text"
-          @click="copyText(order?.code)"
-        />
-      </div>
+      <EaCode v-if="order?.code" v-model="order.code" />
     </v-col>
     <v-col cols="12" sm="2">
       <v-text-field

@@ -8,6 +8,7 @@
   import { copyText, message } from '@/utils/helper.ts'
   import { useTableServer } from '@/utils/hooks.ts'
   import request from '@/utils/request.ts'
+  import EaCode from "@/components/base/EaCode.vue";
 
   const { t } = useI18n()
   const store = useAppStore()
@@ -135,18 +136,7 @@
     @update:options="loadItems"
   >
     <template #[`item.code`]="{ item }">
-      <div class="d-flex align-center">
-        <span
-          class="d-inline-block text-truncate"
-          style="max-width: 150px"
-        >{{ item.code }}</span>
-        <v-btn
-          icon="mdi-content-copy"
-          size="small"
-          variant="text"
-          @click="copyText(item.code)"
-        />
-      </div>
+      <EaCode v-model="item.code" />
     </template>
     <template #[`item.endDate`]="{ value }">
       {{ dayjs(value, "YYYYMMDD").format('YYYY-MM-DD').toString() }}

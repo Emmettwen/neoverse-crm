@@ -13,6 +13,7 @@ declare module 'vue' {
     CreateCity: typeof import('./components/CreateEntry/CreateCity.vue')['default']
     CustomerForm: typeof import('./components/Customer/CustomerForm.vue')['default']
     CustomerInfo: typeof import('./components/OrderDetail/CustomerInfo.vue')['default']
+    EaCode: typeof import('./components/base/EaCode.vue')['default']
     HelloWorld: typeof import('./components/HelloWorld.vue')['default']
     KeyList: typeof import('./components/Order/KeyList.vue')['default']
     KeySingle: typeof import('./components/Order/KeySingle.vue')['default']
